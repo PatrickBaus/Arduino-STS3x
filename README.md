@@ -1,5 +1,6 @@
 Sensirion STS3x Arduino Library
 ===================
+[![CI](https://github.com/PatrickBaus/Arduino-STS3x/actions/workflows/ci.yml/badge.svg)](https://github.com/PatrickBaus/Arduino-STS3x/actions/workflows/ci.yml)
 
 This repository contains an Arduino library for the following Sensirion devices:
  * [STS30A-DIS](https://sensirion.com/products/catalog/STS30A-DIS/)
