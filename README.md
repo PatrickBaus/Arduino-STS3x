@@ -16,7 +16,7 @@ Usage
 -----
 ```cpp
 #include <Wire.h>   // #include <i2c_t3.h> on the Teensy platform.
-#include "src/STS3x.h"
+#include <STS3x.h>
 
 STS3x sensor(Wire); // To use a non-default address use STS3x sensor(Wire, address);
 
@@ -35,8 +35,11 @@ void loop() {
 
 Installation
 -----
-Currently the library does not support the Arduino library manager, so it is highly recommended to copy the full library to a subfolder called
+The library is not (yet) available via the Arduino library manager. Either copy or clone this repository to the `libraries` folder of your sketchbook and use
+```cpp
+#include <STS3x.h>
 ```
-src/
+or copy it to a subfolder of your sketch, e.g. `src/STS3x`, and use
+```cpp
+#include "src/STS3x/src/STS3x.h"
 ```
-within your Arduino project.
