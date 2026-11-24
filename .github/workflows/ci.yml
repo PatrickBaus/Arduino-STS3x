@@ -9,7 +9,7 @@ jobs:
     name: Unit tests and coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install gcovr
         run: pipx install gcovr
@@ -33,7 +33,7 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage/
@@ -43,15 +43,15 @@ jobs:
     name: Arduino Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      # The library is not (yet) registered in the Arduino library manager,
-      # so it is checked against the rules for a new submission. "strict"
-      # compliance would require renaming the library ("STS3X Library" contains
-      # a space and the word "library", rules LP015 and LP016).
-      - uses: arduino/arduino-lint-action@v2
+      # The library is not registered in the Arduino library manager, so the
+      # library manager specific rules are disabled. "strict" compliance would
+      # require renaming the library ("STS3X Library" contains a space and the
+      # word "library", rules LP015 and LP016).
+      - uses: arduino/arduino-lint-action@v3
         with:
-          library-manager: submit
+          library-manager: false
           compliance: specification
 
   compile-examples:
@@ -72,7 +72,7 @@ jobs:
               - name: esp32:esp32
                 source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: arduino/compile-sketches@v1
         with:
