@@ -55,7 +55,11 @@ bool STS3x::writeCommand(const uint16_t command, uint8_t* data, const size_t len
   _pI2cBus->beginTransmission(_i2c_addr);
   bool result = _pI2cBus->write(cmd, sizeof(cmd)) == sizeof(cmd);
   if (len) {
+    // All data sent to the sensor must be followed by its checksum, otherwise
+    // the sensor discards it.
+    const uint8_t crc = STS3x::crc8(data, len);
     result = result & (_pI2cBus->write(data, len) == len);
+    result = result & (_pI2cBus->write(crc) == 1);
   }
   _pI2cBus->endTransmission();
   return result;
