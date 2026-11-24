@@ -13,6 +13,8 @@
  */
 #include "STS3x.h"
 
+#include <math.h>
+
 #if defined(__arm__) && defined(TEENSYDUINO) && (defined(__MK66FX1M0__) || defined(__MK64FX512__) || defined(__MK20DX256__) || defined(__MK20DX128__) || defined(__MKL26Z64__))
 STS3x::STS3x(i2c_t3& i2cBus, const uint8_t address) : _pI2cBus(&i2cBus), _i2c_addr(address) {};
 #else
@@ -127,7 +129,7 @@ float STS3x::readTemp(const Repeatability repeatability) {
   if (this->readTempRaw(value, repeatability)) {
     return STS3x::convertToCelsius(value);
   } else {
-    return nan("");
+    return NAN;
   }
 }
 
@@ -136,7 +138,7 @@ float STS3x::fetchTemp(void) {
   if (this->fetchTempRaw(value)) {
     return STS3x::convertToCelsius(value);
   } else {
-    return nan("");
+    return NAN;
   }
 }
 

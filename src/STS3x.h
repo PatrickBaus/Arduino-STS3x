@@ -14,8 +14,11 @@
 #ifndef STS3x_H
 #define STS3x_H
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+#include <Arduino.h>
 
 // Match Teensy 3.6 (__MK66FX1M0__), Teensy 3.5 (__MK64FX512__), Teensy 3.2/3.1 (__MK20DX256__), Teensy 3.0 (__MK20DX128__), Teensy LC(__MKL26Z64__)
 #if defined(__arm__) && defined(TEENSYDUINO) && (defined(__MK66FX1M0__) || defined(__MK64FX512__) || defined(__MK20DX256__) || defined(__MK20DX128__) || defined(__MKL26Z64__))
