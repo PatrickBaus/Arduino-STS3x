@@ -57,7 +57,8 @@ bool STS3x::writeCommand(const uint16_t command, uint8_t* data, const size_t len
   if (len) {
     result = result & (_pI2cBus->write(data, len) == len);
   }
-  _pI2cBus->endTransmission();
+  // endTransmission() returns 0 on success, anything else is a NACK or a bus error
+  result = result & (_pI2cBus->endTransmission() == 0);
   return result;
 }
 
