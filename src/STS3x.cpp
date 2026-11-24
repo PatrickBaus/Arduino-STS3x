@@ -69,8 +69,14 @@ bool STS3x::queryCommand(const uint16_t command, uint8_t* result, const size_t l
   size_t numberOfBytesread = _pI2cBus->readBytes(result, len);
 
   // Check data for validity
-  if ((numberOfBytesread != len) or (result[len-1] != STS3x::crc8(result, len - 1))) {
+  if (numberOfBytesread != len) {
     return false;
+  }
+  // The sensor sends 16 bit words, each one is followed by its own checksum
+  for (size_t i = 0; i + 2 < len; i += 3) {
+    if (result[i+2] != STS3x::crc8(result + i, 2)) {
+      return false;
+    }
   }
   return true;
 }
@@ -100,10 +106,13 @@ void STS3x::clearStatus(void) {
 }
 
 uint32_t STS3x::readSerial(void) {
-  uint8_t data[4] = {0};
-  this->queryCommand(STS3x::CMD_READ_SERIAL, data, sizeof(data), 1000 /*µs*/);
+  // The serial number is sent as two 16 bit words, each followed by a checksum
+  uint8_t data[6] = {0};
+  if (!this->queryCommand(STS3x::CMD_READ_SERIAL, data, sizeof(data), 1000 /*µs*/)) {
+    return 0;
+  }
 
-  return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3] << 0;
+  return (uint32_t)data[0] << 24 | (uint32_t)data[1] << 16 | (uint32_t)data[3] << 8 | (uint32_t)data[4] << 0;
 }
 
 // Soft-Resets the sensor. Do make sure to call stopConversion() before calling
