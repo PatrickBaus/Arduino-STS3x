@@ -43,7 +43,17 @@ float STS3x::convertToCelsius(const uint16_t value) {
 }
 
 uint16_t STS3x::convertToRaw(const float value) {
-  return (value + 45.0f) * 65535.0f / 175.0f;
+  // Round to the nearest value and saturate at the limits of the measurement
+  // range (-45 °C to 130 °C). Converting an out of range float to an integer is
+  // undefined behaviour. The first comparison also catches NaN.
+  const float raw = (value + 45.0f) * 65535.0f / 175.0f + 0.5f;
+  if (!(raw >= 0.0f)) {
+    return 0;
+  }
+  if (raw >= 65535.0f) {
+    return 65535;
+  }
+  return (uint16_t)raw;
 }
 
 bool STS3x::writeCommand(const uint16_t command, uint8_t* data, const size_t len) {
